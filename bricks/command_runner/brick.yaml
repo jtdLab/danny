@@ -1,0 +1,33 @@
+name: command_runner
+description: A danny command runner
+
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.0-dev.50 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: The name of the command runner
+  commands:
+    type: array
+    description: The commands of the command runner
+  hasCommandWithArgParser:
+    type: boolean
+    description: Wheter the command runner has any command with a custom ArgParser
+  hasBranchCommand:
+    type: boolean
+    description: Wheter the command runner has any branch command
+  hasUsageLineLength:
+    type: boolean
+    description: Wheter the command runner has usageLineLength overriden
+  hasSuggestionDistanceLimit:
+    type: boolean
+    description: Wheter the command runner has suggestionDistanceLimit overriden
+  hasRun:
+    type: boolean
+    description: Wheter the command runner has run method overriden
+  hasRunCommand:
+    type: boolean
+    description: Wheter the command runner has runCommand method overriden

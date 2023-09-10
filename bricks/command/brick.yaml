@@ -1,0 +1,21 @@
+name: command
+description: A danny command
+
+version: 0.1.0
+
+environment:
+  mason: ">=0.1.0-dev.50 <0.1.0"
+
+vars:
+  name:
+    type: string
+    description: The name of the command
+  pathSegments:
+    type: array
+    description: The segments of the command's path
+  description:
+    type: string
+    description: The description of the command
+  hasCustomArgParser:
+    type: boolean
+    description: Whether the command has a custom ArgParser

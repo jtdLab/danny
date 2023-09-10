@@ -1,0 +1,1 @@
+{{^isBranch}}import 'commands/{{#pathCase}}{{{path}}}/{{name}}{{/pathCase}}.dart' as {{> command_import_alias }};{{/isBranch}}{{#isBranch}}{{#subCommands}}{{> command_import }}{{/subCommands}}{{/isBranch}}

@@ -1,0 +1,13 @@
+# Miscellaneous
+.DS_Store
+
+# Dart/pub related
+.dart_tool/
+build
+pubspec.lock
+
+# Coverage
+coverage
+
+!lib/src/commands/build/
+!test/src/commands/build/

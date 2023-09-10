@@ -1,0 +1,80 @@
+name: danny_cli
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/danny_cli.yaml
+      - packages/danny/**
+      - packages/danny_cli/**
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - .github/workflows/danny_cli.yaml
+      - packages/danny/**
+      - packages/danny_cli/**
+  workflow_dispatch:
+
+jobs:
+  setup:
+    defaults:
+      run:
+        working-directory: packages/danny_cli
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.0.0
+      - uses: dart-lang/setup-dart@v1
+
+      - name: Install Dependencies
+        run: dart pub get
+
+      - name: Format
+        run: dart format --set-exit-if-changed lib
+
+      - name: Analyze
+        run: dart analyze --fatal-infos --fatal-warnings lib
+
+  build:
+    needs: setup
+
+    defaults:
+      run:
+        working-directory: packages/danny_cli
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-latest, windows-latest, ubuntu-latest]
+
+    steps:
+      - uses: actions/checkout@v4.0.0
+      - uses: dart-lang/setup-dart@v1
+
+      - name: Install Dependencies
+        run: dart pub get
+
+      - name: Run Tests
+        run: |
+          dart pub global activate coverage 1.2.0
+          dart test -j 1 -x pull-request-only --coverage=coverage && dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=lib
+
+      - name: Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: packages/danny_cli/coverage/lcov.info
+
+  pana:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/pana.yml@v1
+    with:
+      working_directory: packages/danny_cli

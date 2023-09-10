@@ -1,0 +1,27 @@
+{{#isBranch}}{{#subCommands}}{{> command }}{{/subCommands}}{{/isBranch}}{{^isBranch}}class {{#pascalCase}}{{{path}}}/{{name}}{{/pascalCase}}Command extends Command<runner.Type> {
+  {{#pascalCase}}{{{path}}}/{{name}}{{/pascalCase}}Command();
+{{#hasCustomCategory}}
+  @override
+  String get category => {{> command_import_alias }}.category;
+{{/hasCustomCategory}}
+{{#hasCustomInvocation}}
+  @override
+  String get invocation => {{> command_import_alias }}.invocation;
+{{/hasCustomInvocation}}
+{{#hasCustomUsageFooter}}
+  @override
+  ArgParser get usageFooter => {{> command_import_alias }}.usageFooter;
+{{/hasCustomUsageFooter}}
+{{#hasCustomArgParser}}
+  @override
+  ArgParser get argParser => {{> command_import_alias }}.argParser;
+{{/hasCustomArgParser}}
+  @override
+  String get name => '{{name.snakeCase()}}';
+
+  @override
+  String get description => {{> command_import_alias }}.description;
+
+  @override
+  FutureOr<runner.Type> run() => {{> command_import_alias }}.run(globalResults!, argResults!);
+}{{/isBranch}}

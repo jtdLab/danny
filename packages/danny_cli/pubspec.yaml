@@ -1,0 +1,32 @@
+name: danny_cli
+description: Danny CLI allows developers to operate a project specific command
+  line interface
+version: 0.1.0-dev.1
+homepage: https://github.com/jtdLab/danny
+repository: https://github.com/jtdLab/danny/tree/main/packages/danny_cli
+issue_tracker: https://github.com/jtdLab/danny/issues
+
+executables:
+  danny:
+
+environment:
+  sdk: ^3.0.0
+
+dependencies:
+  ansi_styles: ^0.3.2+1
+  args: ^2.4.2
+  collection: ^1.18.0
+  io: ^1.0.4
+  mason: ^0.1.0-dev.50
+  meta: ^1.10.0
+  path: ^1.8.3
+  process: ^5.0.0
+  pubspec: ^2.3.0
+
+dev_dependencies:
+  build_runner: ^2.4.6
+  build_version: ^2.1.1
+  file: ^7.0.0
+  mocktail: ^1.0.0
+  test: ^1.24.6
+  test_descriptor: ^2.0.1

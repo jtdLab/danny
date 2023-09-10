@@ -1,0 +1,37 @@
+{
+    "name": "james",
+    "commands": [
+        {
+            "name": "deploy",
+            "path": "",
+            "isBranch": false,
+            "hasCustomArgParser": true
+        },
+        {
+            "name": "make",
+            "path": "",
+            "isBranch": true,
+            "subCommands": [
+                {
+                    "name": "cool",
+                    "path": "make",
+                    "isBranch": true,
+                    "subCommands": [
+                        {
+                            "name": "widget",
+                            "path": "make/cool",
+                            "isBranch": false,
+                            "hasCustomArgParser": false
+                        }
+                    ]
+                },
+                {
+                    "name": "widget",
+                    "path": "make",
+                    "isBranch": false,
+                    "hasCustomArgParser": false
+                }
+            ]
+        }
+    ]
+}

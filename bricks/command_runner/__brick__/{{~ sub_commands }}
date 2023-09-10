@@ -1,0 +1,6 @@
+{{^isBranch}}{{#pascalCase}}{{{path}}}/{{name}}{{/pascalCase}}Command(),{{/isBranch}}{{#isBranch}}_BranchCommand(
+            '{{name}}',
+            [
+              {{#subCommands}}{{> sub_commands }}{{/subCommands}}
+            ],
+          ),{{/isBranch}}
