@@ -10,7 +10,6 @@ on:
       - main
     paths:
       - .github/workflows/danny_cli.yaml
-      - packages/danny/**
       - packages/danny_cli/**
 
   pull_request:
@@ -18,7 +17,6 @@ on:
       - main
     paths:
       - .github/workflows/danny_cli.yaml
-      - packages/danny/**
       - packages/danny_cli/**
   workflow_dispatch:
 
