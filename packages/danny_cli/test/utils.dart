@@ -24,6 +24,10 @@ const defaultProjectName = 'greet';
 /// `hello` + `friendly hello`.
 Future<void> createProject() async {
   final root = Directory.current.path;
+  await d.dir('.dart_tool', [
+    d.file('a.dart', 'a'),
+    d.file('b.dart', 'b'),
+  ]).create(root);
   await d.dir('commands', [
     d.file('hello.dart', helloDart),
     d.dir('friendly', [
@@ -31,6 +35,7 @@ Future<void> createProject() async {
     ]),
   ]).create(root);
   await d.file('pubspec.yaml', pubspecYaml).create(root);
+  await d.file('pubspec.lock', pubspecYaml).create(root);
   await d.file('runner.dart', runnerDart).create(root);
 }
 

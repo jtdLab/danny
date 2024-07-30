@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:ansi_styles/ansi_styles.dart';
+import 'package:path/path.dart' as p;
 
 import '../../command.dart';
 import '../../exception.dart';
@@ -30,6 +31,33 @@ class ActivateCommand extends DannyCommand {
     final pubspec = project.pubspec;
     final rootDir = project.rootDir;
     final name = pubspec.executables.keys.first;
+
+    final dartToolDir = Directory(p.join(rootDir.path, '.dart_tool'));
+    if (dartToolDir.existsSync()) {
+      dartToolDir.deleteSync(recursive: true);
+    }
+
+    final pubspecLock = File(p.join(rootDir.path, 'pubspec.lock'));
+    if (pubspecLock.existsSync()) {
+      pubspecLock.deleteSync();
+    }
+
+    final dartPubGetResult = await process.run(
+      dartPubGetCommand(),
+      workingDirectory: rootDir.path,
+    );
+
+    if (dartPubGetResult.exitCode != 0) {
+      final stdout = dartPubGetResult.stdout;
+      final stderr = dartPubGetResult.stderr;
+      throw DannyException(
+        'Failed to activate!\n'
+        '\n'
+        '$stdout\n'
+        '\n'
+        '$stderr',
+      );
+    }
 
     final activateResult = await process.run(
       dartPubGlobalActivateSourcePath(),

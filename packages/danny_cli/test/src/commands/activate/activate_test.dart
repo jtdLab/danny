@@ -50,6 +50,35 @@ void main() {
     );
 
     test(
+      'throws when "dart pub get" fails',
+      withMockEnv((manager) async {
+        await createProject();
+        when(
+          () => manager.run(
+            [
+              'dart',
+              'pub',
+              'get',
+            ],
+            workingDirectory: any(named: 'workingDirectory'),
+            runInShell: true,
+          ),
+        ).thenAnswer((_) async => ProcessResult(0, 1, 'stdout', 'stderr'));
+
+        await expectLater(
+          () => command.run(),
+          throwsDannyException(
+            message: 'Failed to activate!\n'
+                '\n'
+                'stdout\n'
+                '\n'
+                'stderr',
+          ),
+        );
+      }),
+    );
+
+    test(
       'throws when "dart pub global activate" fails.',
       withMockEnv((manager) async {
         await createProject();
@@ -84,40 +113,53 @@ void main() {
 
     test(
       'activates a build successfully.',
-      withMockEnv((manager) async {
-        await createProject();
+      withMockFs(
+        withMockEnv((manager) async {
+          await createProject();
 
-        await command.run();
+          await command.run();
 
-        final rootPath = switch (Platform.isWindows) {
-          true => r'C:\',
-          false => '/',
-        };
-        verifyInOrder([
-          () => manager.run(
-                [
-                  'dart',
-                  'pub',
-                  'global',
-                  'activate',
-                  '--source',
-                  'path',
-                  '.',
-                ],
-                workingDirectory: rootPath,
-                runInShell: true,
-              ),
-          () => logger.success(
-                'Activated successfully!',
-                style: any(named: 'style'),
-              ),
-          () => logger.info(''),
-          () => logger.info('To use the new CLI run:'),
-          () => logger.info(''),
-          () => logger.info('  $defaultProjectName --help'),
-          () => logger.info(''),
-        ]);
-      }),
+          final rootPath = switch (Platform.isWindows) {
+            true => r'C:\',
+            false => '/',
+          };
+          expect(Directory('.dart_tool').existsSync(), false);
+          expect(File('pubspec.lock').existsSync(), false);
+          verifyInOrder([
+            () => manager.run(
+                  [
+                    'dart',
+                    'pub',
+                    'get',
+                  ],
+                  workingDirectory: rootPath,
+                  runInShell: true,
+                ),
+            () => manager.run(
+                  [
+                    'dart',
+                    'pub',
+                    'global',
+                    'activate',
+                    '--source',
+                    'path',
+                    '.',
+                  ],
+                  workingDirectory: rootPath,
+                  runInShell: true,
+                ),
+            () => logger.success(
+                  'Activated successfully!',
+                  style: any(named: 'style'),
+                ),
+            () => logger.info(''),
+            () => logger.info('To use the new CLI run:'),
+            () => logger.info(''),
+            () => logger.info('  $defaultProjectName --help'),
+            () => logger.info(''),
+          ]);
+        }),
+      ),
     );
   });
 }
